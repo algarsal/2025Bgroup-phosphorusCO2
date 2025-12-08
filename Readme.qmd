@@ -8,14 +8,14 @@ The study analyzes 6 years of data (2013-2018) from the EucFACE experiment to te
 ## Structure
 * data/: Contains raw CSV files for soil P, microbial P, wood carbon, and GPP.
 * scripts/: R scripts for data processing and analysis.
-  * 01_data_cleaning.R: Prepares the master dataset.
-  * 02_replication.R: Reproduces key findings from the Nature paper (Pool sizes & Stagnation).
-  * 03_alternative.R: Tests a novel hypothesis on Phosphorus Use Efficiency (PUE).
+  - 01_data_cleaning.R: Prepares the master dataset.
+  - 02_replication.R: Reproduces key findings from the Nature paper (Pool sizes & Stagnation).
+  - 03_alternative.R: Tests a novel hypothesis on Phosphorus Use Efficiency (PUE).
 * output/: Generated figures and statistical tables.
 
 ## Key Findings
 1.  Replication: Confirmed that the microbial phosphorus pool is significantly larger than the available soil pool, supporting the pre-emption mechanism.
-2.  Stagnation: Validated that tree biomass (Wood C) did not significantly increase under eCO2 over the study period ($p > 0.05$).
+2.  Stagnation: Validated that tree biomass (Wood C) did not significantly increase under eCO2 over the study period (p > 0.05).
 3.  Alternative Insight: Discovered functional plasticity; trees under eCO2 exhibit higher Phosphorus Use Efficiency (PUE), assimilating more carbon per unit of available soil phosphorus.
 
 ## Usage
