@@ -1,11 +1,11 @@
 {
     "id": "77194A9C",
-    "path": "C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Project outcome/2.R",
-    "project_path": "Project outcome/2.R",
+    "path": "C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Project outcome/02.Assessment of Carbon Allocation Shifts under Elevated CO2.R",
+    "project_path": "Project outcome/02.Assessment of Carbon Allocation Shifts under Elevated CO2.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "2880186253",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1765227506031.0,
     "source_on_save": false,
     "relative_order": 2,
@@ -13,15 +13,16 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "163,0",
-        "scrollLine": "0"
+        "cursorPosition": "176,61",
+        "scrollLine": "166",
+        "softWrapLines": "true"
     },
     "folds": "",
-    "lastKnownWriteTime": 1765230034,
+    "lastKnownWriteTime": 1765302061,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1765295087838,
+    "last_content_update": 1765302061196,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -1,18 +1,22 @@
-# 1. LIBRARIES ------------------------------------------------------------
+#The Hypothesis: The paper argues that because Phosphorus (P) is limited, trees under eCO2 cannot grow more wood ("Stagnation"). Instead, they should send that extra carbon underground to build roots to find more P ("Adaptability"). The Problem: Looking at just "wood" or just "roots" is not enough. We need to see the trade-off.The Solution: We calculated the total Carbon budget for every ring for every year (2013-2018) and compared the ratio of Root Investment vs. Wood Investment.
+
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_data")
+
+# 1. LIBRARIES
 library(tidyverse)
 library(lubridate)
 library(lme4)      # For Linear Mixed-Effects Models
 library(lmerTest)  # To get p-values from LME models
 library(patchwork) # For plotting
 
-# 2. SETUP & HELPER FUNCTION ----------------------------------------------
-
+# 2. SETUP & HELPER FUNCTION 
+#We create a "Lookup Table." Later, we will join this to our data so every number gets assigned a label: eCO2 or aCO2.
 trt_map <- data.frame(
   Ring = factor(c(1, 2, 3, 4, 5, 6)),
   Trt = c("eCO2", "aCO2", "aCO2", "eCO2", "eCO2", "aCO2")
-)
+) 
 
-# Corrected Integration Function (Flux * Days / 1000)
+# Corrected Integration Function (Flux * Days / 1000) The data comes in Rates (grams per day). We cannot analyze "growth" using a daily rate; we need the Total Amount produced in a year.The measurements happen at irregular intervals (sometimes 14 days, sometimes 30 days).
 process_c_flux <- function(file_path, val_col, item_name) {
   read_csv(file_path, show_col_types = FALSE) %>%
     mutate(Ring = factor(Ring), Year = year(ymd(Date))) %>%
@@ -22,8 +26,9 @@ process_c_flux <- function(file_path, val_col, item_name) {
     summarise(Annual_Sum_g = sum(Period_Mass_g, na.rm=TRUE), .groups="drop") %>%
     mutate(Component = item_name)
 }
+#We cannot compare a daily rate of twig fall to a yearly growth of wood. We normalized everything to Grams of Carbon per square meter per Year (g C m⁻² yr⁻¹).
 
-# 3. LOAD ALL COMPREHENSIVE DATA COMPONENTS -------------------------------
+# 3. LOAD ALL COMPREHENSIVE DATA COMPONENTS 
 
 # --- BELOWGROUND (Total Root Investment) ---
 # 1. Fine Roots (Foraging)
@@ -41,7 +46,8 @@ df_twig <- process_c_flux("twiglitter_c_production_flux.csv", "twig_flux", "Twig
 # 6. Seed/Reproduction
 df_seed <- process_c_flux("seedlitter_c_production_flux.csv", "seed_flux", "Seed")
 
-# 4. AGGREGATE THE BUDGET -------------------------------------------------
+
+# 4. AGGREGATE THE BUDGET 
 
 # Combine all dataframes
 all_c_fluxes <- bind_rows(df_fr, df_cr, df_wood, df_bark, df_twig, df_seed)
@@ -60,8 +66,10 @@ c_allocation_full <- all_c_fluxes %>%
     Root_to_Wood_Ratio = Total_Root_C / Total_Woody_C
   ) %>%
   left_join(trt_map, by = "Ring")
+#The tree doesn't just grow wood. It grows leaves, bark, twigs, seeds, and roots. If we only look at one part, we miss the "Strategy." the Solution: We sum the components into two main categories: Total Woody C: This represents "Growth" (Aboveground biomass). Total Root C: This represents "Foraging" (Searching for nutrients underground).
 
-# 5. VISUALIZATION (Comprehensive Budget) ---------------------------------
+
+# 5. VISUALIZATION (Comprehensive Budget) 
 library(ggplot2)
 library(patchwork)
 
@@ -123,19 +131,17 @@ p3 <- ggplot(c_allocation_full, aes(x=Trt, y=Root_to_Wood_Ratio, fill=Trt)) +
 library(patchwork)
 final_plot <- p1 / p2 / p3
 
+
+
 # Display
 print(final_plot)
 
-# =======================================================
-# CRITICAL STEP: HOW TO SAVE IT SO IT LOOKS GOOD
-# =======================================================
-# Because you are stacking 3 plots, you must make the image TALL.
-# If you don't do this, the boxes will look squashed.
 
 ggsave("C_Allocation_Results.png", plot = final_plot, width = 6, height = 12, dpi = 300)
 
 # Display
 final_plot
+
 
 # CRITICAL STEP: Save the file to ensure it looks good
 # Making the height larger (e.g., 10) prevents the titles from crunching together
@@ -153,11 +159,20 @@ run_lme <- function(formula, data, metric_name) {
   print(anova(model)) # Returns the F-statistics and P-values
 }
 
-# Test 1: Did Wood Production Stagnate? (Expect P > 0.05 for Trt)
+# Test 1: Did Wood Production Stagnate? 
 run_lme(Total_Woody_C ~ Trt + as.factor(Year) + (1|Ring), c_allocation_full, "Woody Production")
 
-# Test 2: Did Root Production Increase? (Expect P < 0.05 or trend)
+# Test 2: Did Root Production Increase? 
 run_lme(Total_Root_C ~ Trt + as.factor(Year) + (1|Ring), c_allocation_full, "Root Production")
 
-# Test 3: Did the Allocation Strategy Shift? (Expect P < 0.05)
+# Test 3: Did the Allocation Strategy Shift? 
 run_lme(Root_to_Wood_Ratio ~ Trt + as.factor(Year) + (1|Ring), c_allocation_full, "Root:Wood Ratio")
+
+
+
+#Conclusion 1 (Woody Production): Result: Not Significant."Elevated CO2 did not result in a significant increase in woody biomass production (p>0.05) This confirms the hypothesis of biomass stagnation due to nutrient limitation."
+
+#Conclusion 2 (Root Production): Result: Not Significant. Contrary to the hypothesis that trees would increase root biomass to forage for Phosphorus, we found no significant increase in total root production under eCO2."
+
+#Conclusion 3 (Allocation Strategy): Result: Not Significant. "The Root-to-Wood allocation ratio remained constant between treatments. This indicates that the trees did not structurally adapt their biomass partitioning in response to the CO2 fertilization."
+

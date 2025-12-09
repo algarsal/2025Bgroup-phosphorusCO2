@@ -1,5 +1,5 @@
 #Load the correct location of files we are using for this code:
-setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_a")
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_Data")
 library(tidyverse)
 library(lubridate)
 
