@@ -1,26 +1,23 @@
----
-title: "Readme"
-format: html
-editor: visual
----
+# Microbial Competition & Phosphorus Limitation at EucFACE
 
-## Quarto
+## Project Overview
+This project replicates and extends the findings of *Jiang et al. (Nature, 2024)*, investigating why mature forests fail to sequester additional carbon under elevated CO2 (eCO2) in phosphorus-limited soils.
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+The study analyzes 6 years of data (2013-2018) from the EucFACE experiment to test the "Microbial Pre-emption Hypothesis": that soil microbes outcompete trees for scarce phosphorus, locking it away and preventing tree growth responses to eCO2.
 
-## Running Code
+## Structure
+* data/: Contains raw CSV files for soil P, microbial P, wood carbon, and GPP.
+* scripts/: R scripts for data processing and analysis.
+  - 01_data_cleaning.R: Prepares the master dataset.
+  - 02_replication.R: Reproduces key findings from the Nature paper (Pool sizes & Stagnation).
+  - 03_alternative.R: Tests a novel hypothesis on Phosphorus Use Efficiency (PUE).
+* output/: Generated figures and statistical tables.
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Key Findings
+1.  Replication: Confirmed that the microbial phosphorus pool is significantly larger than the available soil pool, supporting the pre-emption mechanism.
+2.  Stagnation: Validated that tree biomass (Wood C) did not significantly increase under eCO2 over the study period (p > 0.05).
+3.  Alternative Insight: Discovered functional plasticity; trees under eCO2 exhibit higher Phosphorus Use Efficiency (PUE), assimilating more carbon per unit of available soil phosphorus.
 
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+## Usage
+Run the scripts in order: 01 -> 02 -> 03.
+Requires R packages: tidyverse, lme4, lmerTest, patchwork.
