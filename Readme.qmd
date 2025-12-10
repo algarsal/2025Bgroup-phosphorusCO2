@@ -3,7 +3,7 @@
 ## Project Overview
 This project investigates the constraints on forest carbon sequestration under elevated CO2 ($eCO_2$) in phosphorus-limited soils. It is based on data from the **EucFACE (Eucalyptus Free-Air CO2 Enrichment)** experiment (2013–2018).
 
-The analysis acts as both a **replication** and an **extension** of the findings published by:
+The analysis acts as both a replication and an extension of the findings published by:
 > *Jiang et al. (2024). Microbial competition for phosphorus limits the CO2 response of a mature forest. Nature.*
 
 ### The Core Problem
