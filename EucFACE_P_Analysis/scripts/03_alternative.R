@@ -1,5 +1,5 @@
 # ==============================================================================
-# SCRIPT 03: ALTERNATIVE (The "Solution/Response")
+# 03: ALTERNATIVE (The "Solution/Response")
 # ==============================================================================
 library(tidyverse)
 library(lme4)
