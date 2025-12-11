@@ -40,29 +40,67 @@ Is the forest truly passive? We replicate the "stagnation" finding but extend th
 ## 2. Replication Phase: The Problem
 
 We first confirm the paper's mechanism using 2013-2016 data.
-### Introduction to the methods employed- 
-Site description of the project-
-The experiment is situated in the Cumberland Plain woodlands in NSW, Australia in an alluvial floodplain at a 30-meter elevation. The climate of the area is humid temperate-subtropical transitional climate with a mean annual temperature of 17 °C and mean annual precipitation of about 800 mm.
-The area is usually prone to forest fires that usually regenerate the forests every 50-100 years but this specific stand was identified as not having experienced forest fires in the last 200 years of it’s existence. Moreover, it has also not experienced much anthropogenic activity in the last 90 years or so.
-The data for this paper was collected over the period of 2012-2016. Where the samples were collected from different sections of the plant- root, bark, canopy, wood, roots and even the soil profile (at different depths of 0-10, 10-30 and 30-60 cms)
-The Euc FACE experiment includes 6 carbon fibre rings of 25 m2 diameter each, of which, 3 are constantly releasing CO2 at a level which is 150 ppm over the ambient levels at the moment while 3 of them are acting as control.
-Earlier studies in the forest has concluded that the P- fertilization can increase the biomass and productivity of this forest since the old paedogenic history of the soil complements the extremely low P- content of the soil. This concludes that P is a limiting factor in this experiment.
-Estimates of P and C pools in this experiment-
-Estimates of P pools and fluxes- The incremental increase and flux of the P in the given rings was calculated in an annual timeline with the unit of g P per m2 and the data was regularly collected over the time period of 2012-2018. For the plots/rings with subreplicates, the plot mean was considered to derive a annual mean and then within the years, a multi-year mean was calculated based on that with the uncertainties included as standard errors.
-For plant P pools- the  sum of all vegetation P pools, namely: canopy, stem, fine-root, coarse-root, understorey aboveground, standing dead wood and forest floor leaf litter P pools was calculated together.
-Leaves from the canopy were selected from 3-4 trees per tree from the understory during the winter months (June) and then Kjeldahl’s digestion procedure was employed and colorimetrically analysed at 880 nm. For the leaf litter, 8 litter traps were intalled per plot and then the
-For woody portions- Samples were obtained at breast height from 3 dominant trees in each plot in the summers.   And similarly Kjeldahl’s Digestion and inductively coupled plasma optical emission spectroscopy (Perkin-Elmer) was employed to quantify the P levels in the samples collected.
-For the root samples, 4 random 1X 1 m2 areas were identified in the plots from where root samples were extracted from 3 different depths. Samples were collected using an auger. Sample collection was done in the summer months.  After sorting and oven-drying, small representative subsamples (~100 mg) from each standing crop core for each date were ground on the Wig-L-Bug dental grinder and assessed using X-ray fluorescence spectrometry.
-For the frass-  Frass was oven-dried at 40 °C for 72 h. After sorting, frass samples were weighed, pooled by plot and ground into a fine powder for chemical analysis. Ash was dissolved in 5 ml of 1% perchloric acid and the total P was quantified using the ascorbic acid–molybdate reaction.
-For the soil samples- Soil P pools were determined based on soil collected from four 2 m × 2 m subplots within each of the six FACE plots. Three soil cores (3 cm diameter) were collected from each sample location and pooled into one composite sample for each subplot. Pooled soils were sieved (<2 mm). Soils were repeatedly sampled over the top 10 cm between 2013 and 2015, once for the 10–30 cm depth in 2013 and once in 2017 for 0–10 cm, 10–30 cm and 30 cm to a hard clay layer located at variable depth across the site .  total soil P concentration was determined on finely milled ,oven-dried (40 °C, 48 h) soils after aqua regia digestion and inductively coupled plasma mass spectrometry (ICP-MS) analysis .
-Microbial assessment- The microbial P pool, comprising bacteria, archaea, protozoa and fungi, was assessed within 2 days of sampling using chloroform fumigation extraction77, and estimated quarterly between 2014 and 2015 for 0–10 cm and once in 2017 (0–10 cm, 10–30 cm and 30–60 cm)
-The flux in different regions. 
-Soil P flux-  The soil net P-mineralization flux (gross mineralization minus gross immobilization) was determined in situ at the 0–10 cm depth on a quarterly basis as the change in phosphate concentration between two timepoints between January 2013 and January 2016 using PVC pipes ( does not include contributions from plant roots that could potentially affect the C input and P exchange in the PVC pipes). 
-The net mineralization activity was proportional to organic matter content, microbial biomass and fine-root biomass, and applied the proportion of change of measured soil C, microbial C and fine-root C across depth. The values obtained were differing by only 4.5% each, so the final report did the calculation by using only the soil C data only. 
-Vegetation P flux- For this , the sum of all of the vegetation P fluxes to support the annual biomass growth, namely: canopy, stem, branch, bark, twig, reproduction, fine-root, coarse root and understorey aboveground. P production flux was calculated by multiplying the respective P concentration measured in the live plant organ and the corresponding annual biomass production rate for each tree. The production flux of the understorey aboveground component was estimated on the basis of biomass clippings taken between 2014 and 2017.
+
+**1)Site description of the project-**
+
+The experiment is situated in the [Cumberland Plain woodlands]{.underline} in NSW, Australia in an alluvial floodplain at a 30-meter elevation. The climate of the area is humid temperate-subtropical transitional climate with a mean annual temperature of [17 °C]{.underline} and mean annual precipitation of about [800 mm.]{.underline}
+
+The area is usually prone to forest fires that usually regenerate the forests every 50-100 years but this specific stand was identified as not having experienced forest fires in the last [200 years]{.underline} of it’s existence. Moreover, it has also not experienced much anthropogenic activity in the last 90 years or so.
+
+The data for this paper was collected over the period of [2012-2018]{.underline}. Where the samples were collected from different sections of the plant- [leaves, root, bark, canopy, wood, roots and even the soil profile]{.underline} (at different depths of 0-10, 10-30 and 30-60 cms)
+
+The Euc FACE experiment includes [6]{.underline} carbon fibre rings of 25 m2 diameter each, of which, 3 are constantly releasing CO2 at a level which is 150 ppm over the ambient levels at the moment while 3 of them are acting as control.
+
+Earlier studies in the forest has concluded that the P- fertilization can increase the biomass and productivity of this forest since the old paedogenic history of the soil complements the extremely low P- content of the soil. This concludes that [P is a limiting factor in this experiment.]{.underline}
+
+**2)Estimates of P and C pools in this experiment**
+
+***Estimates of P pools and fluxes***
+
+ The incremental increase and flux of the P in the given rings was calculated in an annual timeline with the unit of [g P per m2]{.underline} and the data was regularly collected over the time period of 2012-2018. For the plots/rings with subreplicates, the plot mean was considered to derive a annual mean and then within the years, a multi-year mean was calculated based on that with the uncertainties included as standard errors.
+
+***2.1)For plant P pools***
+
+the  sum of all vegetation P pools, namely: canopy, stem, fine-root, coarse-root, understorey aboveground, standing dead wood and forest floor leaf litter P pools was calculated together.
+
+***2.2) For the Leaves***
+
+*f*rom the canopy were selected from 3-4 trees per tree from the understory during the winter months (June) and then [Kjeldahl’s digestion procedure]{.underline} was employed and [colorimetrically analysed at 880 nm.]{.underline} For the leaf litter, 8 litter traps were intalled per plot and then the
+
+***2.3)For woody portions***
+
+Samples were obtained at breast height from 3 dominant trees in each plot in the summers.   And similarly [Kjeldahl’s Digestion]{.underline} and inductively coupled [plasma optical emission spectroscopy]{.underline} ([Perkin-Elmer]{.underline}) was employed to quantify the P levels in the samples collected.
+
+***2.4)For the root samples***
+
+4 random 1X 1 m2 areas were identified in the plots from where root samples were extracted from 3 different depths. Samples were collected using an auger. Sample collection was done in the summer months.  After sorting and oven-drying, small representative subsamples [(\~100 mg)]{.underline} from each standing crop core for each date were ground on the [Wig-L-Bug dental grinder]{.underline} and assessed using [X-ray fluorescence spectrometry.]{.underline}
+
+[***2.5)For the frass***]{.underline}
+
+ Frass was oven-dried at [40 °C for 72 h]{.underline}. After sorting, frass samples were weighed, pooled by plot and ground into a fine powder for chemical analysis. Ash was dissolved in [5 ml of 1% perchloric acid]{.underline} and the total P was quantified using the [ascorbic acid–molybdate reaction]{.underline}.
+
+***2.6)For the soil samples***
+
+Soil P pools were determined based on soil collected from four 2 m × 2 m subplots within each of the six FACE plots. Three soil cores (3 cm diameter) were collected from each sample location and pooled into one composite sample for each subplot. Pooled soils were sieved [(\<2 mm).]{.underline} Soils were repeatedly sampled over the top 10 cm [between 2013 and 2015]{.underline}, once for the 10–30 cm depth [in 2013 and once in 2017]{.underline} for 0–10 cm, 10–30 cm and 30 cm to a hard clay layer located at variable depth across the site .  total soil P concentration was determined on finely milled ,oven-dried (40 °C, 48 h) soils after [aqua regia digestion]{.underline} and [inductively coupled plasma mass spectrometry (ICP-MS) analysis .]{.underline}
+
+***2.7)Microbial assessment***
+
+The microbial P pool, comprising bacteria, archaea, protozoa and fungi, was assessed within 2 days of sampling using [chloroform fumigation extraction]{.underline}, and estimated quarterly between [2014 and 2015]{.underline} for 0–10 cm and once in 2017 (0–10 cm, 10–30 cm and 30–60 cm)
+
+**3)The flux in different regions**
+
+***3.1)Soil P flux***
+
+The soil net P-mineralization flux (gross mineralization minus gross immobilization) was determined in situ at the 0–10 cm depth on a quarterly basis as the change in phosphate concentration between two timepoints between January 2013 and January 2016 [using PVC pipes]{.underline} ( does not include contributions from plant roots that could potentially affect the C input and P exchange in the PVC pipes).
+
+The net mineralization activity was proportional to organic matter content, microbial biomass and fine-root biomass, and applied the proportion of change of measured soil C, microbial C and fine-root C across depth. [***The values obtained were differing by only 4.5% each, so the final report did the calculation by using only the soil C data only.***]{.underline}
+
+***3.2)Vegetation P flux***
+
+For this , the sum of all of the vegetation P fluxes to support the annual biomass growth, namely: canopy, stem, branch, bark, twig, reproduction, fine-root, coarse root and understorey aboveground. P production flux was calculated by multiplying the respective P concentration measured in the live plant organ and the corresponding annual biomass production rate for each tree. The production flux of the understorey aboveground component was estimated on the basis of biomass clippings taken between 2014 and 2017.
 
 ```{r}
-df <- read_csv("data/master_data.csv")
+df <- read_csv("EucFACE_P_Analysis/data/master_data.csv")
 
 # A. Inventory
 pool_stats <- df %>% group_by(Trt) %>% 
@@ -96,8 +134,8 @@ stats_table(m_wood, "Wood Carbon ANOVA")
 
 ***Result:*** P \> 0.05 for Treatment. There is no significant increase in wood biomass. Replication successful.
 
-**3. Extension Phase: The Adaptation** Are trees fighting back? We test two alternative hypotheses. \
-**A. Foraging Strategy (Allocation)** \
+**3. Extension Phase: The Adaptation** Are trees fighting back? We test two alternative hypotheses.\
+**A. Foraging Strategy (Allocation)**\
 Do trees invest more carbon into roots relative to wood to search for P?
 
 ```{r}
@@ -108,7 +146,7 @@ ggplot(df, aes(x=Year, y=Root_Shoot, color=Trt)) +
   scale_color_manual(values=c("black", "red")) + theme_classic()
 ```
 
-**B. Functional Efficiency (PUE)** \
+**B. Functional Efficiency (PUE)**\
 Do trees gain more Carbon per gram of available P?
 
 ```{r}
@@ -126,7 +164,7 @@ m_pue <- lmer(GPP ~ Soil_P * Trt + (1|Ring), data=df_clean)
 kable(summary(m_pue)$coefficients, caption="Effect of Treatment on Efficiency")
 ```
 
-## 4. Conclusion 
+## 4. Conclusion
 
 **1, Replication:** We confirmed Jiang et al.'s finding that microbial competition creates a P bottleneck, leading to biomass stagnation in wood.
 
