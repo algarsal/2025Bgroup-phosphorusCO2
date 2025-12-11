@@ -1,5 +1,5 @@
 #Load the correct location of files we are using for this code:
-setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_data")
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_Data")
 library(tidyverse)
 library(lubridate)
 
@@ -127,6 +127,7 @@ summary_table <- final_analysis %>%
 
 print("--- Time-Averaged Ecosystem P Budget (2013-2018) ---")
 print(summary_table)
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Project outcome")
 
 #Orange Box (Soil Supply) is significantly higher than the Green Box (Tree Uptake).The soil microbes are mineralizing (releasing) plenty of Phosphorus—enough to support more tree growth. However, the trees are only capturing a small fraction of it.This proves the "Microbial Bottleneck." The microbes release the P, but because they are physically closer to the enzyme sites and biologically faster, they "immobilize" (eat) the P before the tree roots can grab it.
 # CO2 did not solve the problem.Green Boxes (Uptake) for aCO2 vs eCO2 are likely at the same level (no significant increase).#Scientific Meaning: Even though the trees had extra Carbon (energy) from the eCO2 to grow more roots , it didn't result in more Phosphorus Uptake.
