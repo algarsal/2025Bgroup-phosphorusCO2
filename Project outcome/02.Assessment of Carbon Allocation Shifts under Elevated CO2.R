@@ -1,4 +1,4 @@
-#The Hypothesis: The paper argues that because Phosphorus (P) is limited, trees under eCO2 cannot grow more wood ("Stagnation"). Instead, they should send that extra carbon underground to build roots to find more P ("Adaptability"). The Problem: Looking at just "wood" or just "roots" is not enough. We need to see the trade-off.The Solution: We calculated the total Carbon budget for every ring for every year (2013-2018) and compared the ratio of Root Investment vs. Wood Investment.
+#The Hypothesis: The paper argues that because Phosphorus (P) is limited, trees under eCO2 cannot grow more wood ("Stagnation"). Instead, they should send that extra carbon underground to build roots to find more P ("Adaptability"). The Problem: Looking at just "wood" or just "roots" is not enough. We need to see the trade-off.The Solution: We calculated the total Carbon budget for every ring for every year (2013-2018) and compared the ratio of Root Investment vs. Wood Investment. 
 
 setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_data")
 
@@ -143,7 +143,7 @@ ggsave("C_Allocation_Results.png", plot = final_plot, width = 6, height = 12, dp
 final_plot
 
 
-# CRITICAL STEP: Save the file to ensure it looks good
+
 # Making the height larger (e.g., 10) prevents the titles from crunching together
 ggsave("Analysis_Results_Stacked.png", final_plot, width = 6, height = 10)
 # 6. CORRECT STATISTICS (Linear Mixed-Effects Models) ---------------------

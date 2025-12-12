@@ -137,7 +137,7 @@ ggsave("Summary_Effect_Size.png", plot = p_effect, width = 8, height = 5)
 
 print("SUCCESS: All Stoichiometry and Summary plots created.")
 
-#The Effect Size analysis summarizes the ecosystem response. Across all major biomass and nutrient fluxes—including wood production, fine root production, and plant P uptake—the percentage change under elevated CO2 was negligible (near 0%). This confirms that the Phosphorus limitation effectively neutralized the CO2 fertilization effect across the entire system
+#The Effect Size analysis summarizes the ecosystem response. Across all major biomass and nutrient fluxes—including wood production, fine root production, and plant P uptake—the percentage change under elevated CO2 was negligible (near 0%). This confirms that the Phosphorus limitation effectively neutralized the CO2 fertilization effect across the entire system. 
 
 
 
