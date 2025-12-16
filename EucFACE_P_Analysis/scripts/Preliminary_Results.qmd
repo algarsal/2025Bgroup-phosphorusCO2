@@ -18,7 +18,8 @@ execute:
   message: false
 ---
 
-*Jiang M, Crous KY, Carrillo Y, et al. Microbial competition for phosphorus limits the CO2 response of a mature forest. Nature. 2024;630(8017):660-665. doi:10.1038/s41586-024-07491-0*
+**Reference:***\
+Jiang M, Crous KY, Carrillo Y, et al. Microbial competition for phosphorus limits the CO2 response of a mature forest. Nature. 2024;630(8017):660-665. doi:10.1038/s41586-024-07491-0*
 
 ```{r setup}
 #| include: false
