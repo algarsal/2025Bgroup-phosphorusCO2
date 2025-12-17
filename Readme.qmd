@@ -1,4 +1,10 @@
+
 # Microbial Competition & Tree Functional Plasticity at EucFACE
+
+## Project Overview
+This repository contains the R analysis pipeline used to investigate **Biomass Stagnation** and **Microbial Phosphorus Competition** at the EucFACE (Eucalyptus Free-Air CO$_2$ Enrichment) experiment.
+
+The analysis integrates 6 years of flux and pool data (2013–2018) to test a critical question in climate change ecology: **Can mature forests on low-phosphorus soils sequester additional carbon under elevated CO$_2$?**
 
 ## 1. Introduction
 
