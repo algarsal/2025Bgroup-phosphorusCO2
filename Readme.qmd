@@ -56,34 +56,25 @@ We included **Ring** as a random intercept to account for the split-plot experim
 
 ---
 
+## 3. Research Hypotheses
 
+Based on the Microbial Pre-emption theory, we tested four specific predictions:
 
-
-## 3. Analytical Framework & Hypotheses
-
-Based on the Microbial Pre-emption theory, we tested four specific predictions using a four-stage mass-balance analysis:
-
-1.  **H1: The Stagnation Hypothesis (Carbon):** Due to nutrient limitation, trees under $eCO_2$ will not show a significant increase in woody biomass or root biomass production compared to ambient trees.
-2.  **H2: The Nutrient Bottleneck Hypothesis (Fluxes):** Plant Phosphorus uptake will be constrained by microbial competition. We predict that uptake will not increase under $eCO_2$, and that total uptake will exceed measurable soil supply, indicating tight recycling.
-3.  **H3: The Hoarding Hypothesis (Pools):** Soil microbes will sequester a substantial portion of the ecosystem's phosphorus. We predict the **Microbial P Pool** will be significantly larger than the available soil P pool.
-4.  **H4: The Functional Plasticity Hypothesis (Efficiency):** Trees will attempt to adapt. We predict trees under $eCO_2$ will exhibit higher **Phosphorus Use Efficiency (PUE)**.
+*   **H1: The Stagnation Hypothesis (Carbon):** Due to nutrient limitation, trees under $eCO_2$ will **not** show a significant increase in woody biomass or root biomass production compared to ambient trees.
+*   **H2: The Nutrient Bottleneck Hypothesis (Fluxes):** Plant Phosphorus uptake will be constrained by microbial competition. We predict that uptake will not increase under $eCO_2$, and that total uptake will exceed measurable soil supply, indicating tight recycling and microbial immobilization.
+*   **H3: The Hoarding Hypothesis (Pools):** Soil microbes will sequester a substantial portion of the ecosystem's phosphorus. We predict the **Microbial P Pool** will be significantly larger than the available soil P pool and comparable to the total vegetation P pool.
+*   **H4: The Functional Plasticity Hypothesis (Efficiency):** Trees will attempt to adapt to the limitation. We predict trees under $eCO_2$ will exhibit higher **Phosphorus Use Efficiency (PUE)**, assimilating more Carbon per unit of Phosphorus used.
 
 ---
 
-## 4. Methodology & Statistical Approach
+## 4. Analytical Framework
 
-### Data Processing
-All analysis was performed in R. Raw daily flux rates were integrated over time to generate annual sums. Pool measurements were averaged annually. Data cleaning involved removing measurement artifacts (e.g., negative dendrometer readings caused by drought shrinkage) to ensuring accurate ratios.
+This study employs a four-stage mass-balance analysis to trace the fate of Carbon and Phosphorus through the ecosystem:
 
-### Statistical Modeling: Why "Ring" is a Random Intercept
-We analyzed the effect of elevated CO2 using **Linear Mixed-Effects Models (LMM)** via the `lme4` package.
-
-$$Y \sim Treatment + Year + (1 | Ring)$$
-
-**Explanation of Terms:**
-*   **Fixed Effects ($Treatment + Year$):** We are interested in the systematic effect of $eCO_2$ and how it changes over time.
-*   **Random Intercept ($1 | Ring$):** The **Ring** is the fundamental experimental unit. Trees within the same ring are not independent; they share the same soil, microclimate, and history. Furthermore, one ring might naturally have better soil quality than another, regardless of CO2 treatment.
-    *   By setting "Ring" as a random intercept, we allow each ring to have its own starting baseline. This ensures that we are testing the *relative* effect of CO2 within the system, rather than just comparing spatial differences between patches of forest. This controls for spatial heterogeneity and prevents "pseudoreplication."
+1.  **Biomass Assessment:** Testing for physical growth responses (Wood/Root growth).
+2.  **Flux Budgeting:** Comparing **Soil P Supply** (Net Mineralization) against **Tree P Uptake** to quantify the magnitude of the nutrient deficit.
+3.  **Pool Inventory:** Mapping where Phosphorus is stored to test for microbial hoarding.
+4.  **Efficiency Analysis:** Evaluating **Phosphorus Use Efficiency (PUE)** to measure physiological adaptation.
 
 ---
 
