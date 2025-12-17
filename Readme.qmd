@@ -5,31 +5,26 @@
 This repository contains the R analysis pipeline used to investigate **Biomass Stagnation** and **Microbial Phosphorus Competition** at the EucFACE (Eucalyptus Free-Air CO$_2$ Enrichment) experiment.
 
 The analysis integrates 6 years of flux and pool data (2013–2018) to test a critical question in climate change ecology: **Can mature forests on low-phosphorus soils sequester additional carbon under elevated CO$_2$?**
-
 ## 1. Introduction
 
 ### 1.1 The Challenge: Carbon Sequestration in P-Limited Forests
 Elevated atmospheric carbon dioxide ($eCO_2$) is widely predicted to act as a "fertilizer" for global forests, stimulating photosynthesis and increasing biomass carbon sequestration. This process is relied upon as a critical buffer against climate change in Earth System Models. However, empirical evidence suggests that in phosphorus-limited landscapes—which cover vast areas of the tropics and subtropics—this fertilization effect often fails to materialize.
 
-This creates a **"Stoichiometric Mismatch"**: while $eCO_2$ increases the supply of Carbon (C), trees require Phosphorus (P) to convert that carbon into biomass (wood and roots). In ancient, weathered soils, P availability is not governed by simple chemical weathering, but by intense biological competition. Recent work by **Jiang et al. (2024)** posits the **"Microbial Pre-emption Hypothesis"**, suggesting that soil microorganisms, which are biologically faster and spatially closer to nutrient sources, "steal" mineralized P before tree roots can access it.
+This creates a **"Stoichiometric Mismatch"**: while $eCO_2$ increases the supply of Carbon (C), trees require Phosphorus (P) to convert that carbon into biomass (wood and roots). In ancient, weathered soils, P availability is not governed by simple chemical weathering, but by intense biological competition.
 
-### 1.2 Study Site: The EucFACE Experiment
+### 1.2 The Microbial Pre-emption Hypothesis
+Recent work by **Jiang et al. (2024)** posits the **"Microbial Pre-emption Hypothesis"** as the primary driver of this stagnation. The theory suggests that soil microorganisms—which are biologically faster and spatially closer to nutrient sources—outcompete trees for scarce phosphorus. This effectively "locks" the nutrient away from vegetation, creating a bottleneck that prevents the forest from utilizing the extra carbon available in the atmosphere.
+
+### 1.3 Study Site: The EucFACE Experiment
 To investigate this phenomenon, we utilize data from the **Eucalyptus Free-Air CO$_2$ Enrichment (EucFACE)** experiment. Located in the Cumberland Plain woodlands of New South Wales, Australia, EucFACE is the only fully operational Free-Air CO$_2$ experiment in a mature, native forest in the Southern Hemisphere.
 
 **Site Characteristics:**
 The ecosystem is a mature, evergreen *Eucalyptus tereticornis* woodland situated on ancient alluvial soils. Crucially, the site has a unique disturbance history: it has been unmanaged for over 90 years and has not experienced forest fire for approximately 200 years. This lack of fire-driven nutrient recycling has driven the ecosystem into a state of extreme phosphorus limitation, making it the ideal testbed for nutrient-constraint hypotheses.
 
-**Experimental Setup:**
-The facility consists of six open-air arrays (referred to as **"Rings"**), each 25 meters in diameter and rising into the canopy.
+**Experimental Design:**
+The experiment consists of six open-air arrays (referred to as **"Rings"**), each 25 meters in diameter and rising into the canopy.
 *   **Treatment ($eCO_2$):** 3 Rings release $CO_2$ programmed to maintain concentrations 150 ppm above ambient levels.
 *   **Control ($aCO_2$):** 3 Rings release ambient air to control for infrastructure effects.
-
-### 1.3 Data Origin and Structure
-The data used in this analysis originates from the comprehensive ecosystem inventory compiled by Jiang et al., published in *Nature* (2024). The dataset represents a mass-balance accounting of the ecosystem from **2013 to 2018**.
-
-*   **Data Source:** [Jiang et al. Data Repository (Figshare)](https://doi.org/10.6084/m9.figshare.25596213)
-*   **Sample Size:** The study design includes $N=6$ experimental units (Rings), split into two groups ($n=3$ Treatment, $n=3$ Control).
-*   **Structure:** The data contains repeated measures over time. Variables include **Fluxes** (rates of growth, uptake, and mineralization measured in $g \cdot m^{-2} \cdot yr^{-1}$) and **Pools** (standing stocks of biomass and nutrients measured in $g \cdot m^{-2}$).
 
 ---
 
