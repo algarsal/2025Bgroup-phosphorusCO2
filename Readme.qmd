@@ -27,20 +27,37 @@ The experiment consists of six open-air arrays (referred to as **"Rings"**), eac
 *   **Control ($aCO_2$):** 3 Rings release ambient air to control for infrastructure effects.
 
 ---
+## 2. Data Description & Methodologies
 
-## 2. Research Objectives
+### 2.1 Measurement Methodologies
+The data originates from a comprehensive field campaign at EucFACE (2013–2018). The following specific methods were used to quantify Carbon and Phosphorus stocks and fluxes:
 
-The goal of this project is to critique and extend the findings regarding forest passivity. Rather than viewing the forest as a static system, we aim to uncover physiological responses to nutrient stress.
+*   **Vegetation Sampling:**
+    *   **Woody Biomass:** Tree growth was measured using dendrometer bands (metal bands around trunks) to track stem increment. Tissue samples (sapwood/heartwood) were collected via drilling.
+    *   **Canopy Turnover:** Leaf litterfall was collected monthly using eight circular fine-mesh traps ($0.2 m^2$) per ring.
+    *   **Root Biomass:** Fine roots ($<2mm$) were sampled using soil coring (augers) and in-growth cores (mesh bags buried in soil) to measure production rates over time.
 
-### Phase 1: Validating the Mechanism (Replication)
-Our first objective is to verify the "Microbial Lockout" mechanism proposed by Jiang et al. We aim to reconstruct the ecosystem Phosphorus budget to determine if the lack of tree growth is indeed caused by microbial hoarding. We will quantify the magnitude of the "Phosphorus Gap"—the difference between what the soil releases and what the trees actually acquire—to confirm if microbes are severing the nutrient supply line.
+*   **Chemical Analysis (The "Gold Standard"):**
+    *   **Leaf Tissue:** Dried and ground samples underwent **Kjeldahl digestion** (sulfuric acid + hydrogen peroxide) followed by **colorimetric analysis** (molybdate reaction) to determine P concentration.
+    *   **Woody Tissue:** Samples were analyzed using **Inductively Coupled Plasma Optical Emission Spectroscopy (ICP-OES)**.
+    *   **Root Tissue:** Total P concentration in fine roots was assessed using **X-ray Fluorescence Spectrometry**.
 
-### Phase 2: Identifying Adaptation (Extension)
-Our second, novel objective is to test for **Functional Plasticity**. While previous studies focused on biomass *quantity* (which stagnated), we hypothesize that the *quality* and *allocation* of tree growth has shifted. We aim to determine if trees under $eCO_2$ are actively fighting the nutrient blockade by:
-1.  **Altering Foraging Strategy:** Shifting carbon investment from wood (storage) to fine roots (acquisition).
-2.  **Increasing Efficiency:** Physiological upregulation to fix more carbon per unit of phosphorus (Phosphorus Use Efficiency).
+*   **Soil & Microbial Analysis:**
+    *   **Total Soil P:** Determined via **Aqua Regia digestion** followed by ICP-MS analysis.
+    *   **Microbial P:** Measured using **Chloroform Fumigation-Extraction**. Soil samples are fumigated to lyse (burst) microbial cells, releasing their internal P, which is then measured against non-fumigated controls.
+    *   **Net Mineralization (Flux):** Measured *in situ* using PVC soil cores incubated in the ground. The change in phosphate concentration over time represents the net supply rate from soil to plants.
+
+### 2.2 Data Structure and Processing
+*   **File Organization:** Raw data is stored in `.csv` files.
+*   **Spatial Aggregation:** Soil and microbial data, collected at distinct depths (0-10 cm, 10-30 cm), were summed to represent the total active root zone (0-30 cm) for ecosystem-level comparisons.
+
+**Rationale:**
+We included **Ring** as a random intercept to account for the split-plot experimental design. Trees within the same ring are not independent; they share the same soil, microclimate, and history. Furthermore, one ring might naturally have better soil quality than another, regardless of CO2 treatment. Using a random intercept controls for this spatial heterogeneity and prevents pseudoreplication, ensuring that we test the *relative* effect of $eCO_2$ within the system.
 
 ---
+
+
+
 
 ## 3. Analytical Framework & Hypotheses
 
