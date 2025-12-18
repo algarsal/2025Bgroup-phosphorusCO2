@@ -80,15 +80,9 @@ This study employs a four-stage mass-balance analysis to trace the fate of Carbo
 
 ## 5. Repository Structure
 
-```text
-EucFACE_Project/
-├── data/                       # Raw input files (CSVs)
-│   ├── Flux_data/            # Daily rate files (Roots, Soil Mineralization, Wood growth)
-│   └── Pool_data/            # Snapshot files (Microbial P, Tissue P concentrations)
-├── scripts/                    # Analysis Source Code
-│   ├── 01_data_cleaning.R      # Merges raw files into master dataset
-│   ├── 02_replication.R        # Generates P Inventory & Biomass Stagnation plots
-│   └── 03_alternative.R        # Generates PUE & Root Allocation plots + LMM stats
-├── output/                     # Generated Figures
-│   └── FINAL_REPORT_ANALYSIS.png  # The 4-panel summary figure
-└── Report.qmd                  # Quarto file to generate the final HTML report
+```
+EucFACE_P_Analysis/
+├── data/                                    # Raw input files (CSVs)
+├── output/                                  # Generated Figures
+│   └── FINAL_REPORT_ANALYSIS.png            # The 4-panel summary figure
+└── Preliminary_Results.qmd                  # Quarto file to generate the final HTML report
