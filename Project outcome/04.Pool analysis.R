@@ -141,9 +141,9 @@ print(anova(mod_plant))
 print("--- STATS: Did Microbes hoard more P under eCO2? ---")
 mod_mic <- lmer(Value ~ Trt + as.factor(Year) + (1|Ring), 
                 data = df_mic %>% left_join(trt_map, by="Ring"))
-print(anova(mod_mic))
+print(anova(mod_mic)) 
 
 
 #Chemical Limitation: "The pool of Available Soil P (Phosphate) was negligible compared to biological pools, confirming that the ecosystem is severely P-limited.
-#"Microbial Dominance:"The Microbial P pool was substantial, holding a quantity of Phosphoruscomparable to the entire standing biomass of the forest vegetation. This supports the hypothesis of strong microbial competition.
+#"Microbial Dominance:"The Microbial P pool was substantial, holding a quantity of Phosphorus comparable to the entire standing biomass of the forest vegetation. This supports the hypothesis of strong microbial competition.
 #"Biomass Stagnation: "There was no significant increase in Total Plant P stocks under elevated CO2 (p>0.05p>0.05). This confirms that the physiological constraints imposed by P limitation prevented the conversion of atmospheric CO2 into long-term biomass storage."

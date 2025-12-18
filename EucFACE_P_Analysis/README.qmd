@@ -1,0 +1,15 @@
+---
+title: "README: Microbial Competition and Tree Functional Plasticity"
+subtitle: "Replicating and Extending Jiang et al. (Nature, 2024)"
+author: "Gia Trieu Pham; Ani Ugrelidze; Oishanu Dutta; Muhammad Hasher Naveed"
+date: last-modified
+---
+This is the `README.qmd` file for navigating you through our project.
+
+## Project Structure
+The analysis is contained within the `Preliminary-results.qmd` file, which generates the final HTML report.
+
+*   `Preliminary-results.qmd`: Main analysis script (Quarto).
+*   `data/`: Contains all CSV files required for analysis.
+*   `2025BGroup-phosphorusCO2.Rproj`: Rstudio project file.
+*   `EucFACE_P_Analysis/`: The folder for all the files.

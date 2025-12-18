@@ -1,53 +1,94 @@
+
 # Microbial Competition & Tree Functional Plasticity at EucFACE
 
 ## Project Overview
-This project investigates the constraints on forest carbon sequestration under elevated CO2 ($eCO_2$) in phosphorus-limited soils. It is based on data from the **EucFACE (Eucalyptus Free-Air CO2 Enrichment)** experiment (2013–2018).
+This repository contains the R analysis pipeline used to investigate **Biomass Stagnation** and **Microbial Phosphorus Competition** at the EucFACE (Eucalyptus Free-Air CO$_2$ Enrichment) experiment.
 
-The analysis acts as both a replication and an extension of the findings published by:
-> *Jiang et al. (2024). Microbial competition for phosphorus limits the CO2 response of a mature forest. Nature.*
+The analysis integrates 6 years of flux and pool data (2013–2018) to test a critical question in climate change ecology: **Can mature forests on low-phosphorus soils sequester additional carbon under elevated CO$_2$?**
+## 1. Introduction
 
-### The Core Problem
-Elevated atmospheric $CO_2$ is expected to increase tree growth. However, in low-phosphorus soils, this growth often stagnates. The **"Microbial Pre-emption Hypothesis"** suggests that soil microbes outcompete trees for scarce phosphorus, locking it away and blocking the fertilization effect.
+### 1.1 The Challenge: Carbon Sequestration in P-Limited Forests
+Elevated atmospheric carbon dioxide ($eCO_2$) is widely predicted to act as a "fertilizer" for global forests, stimulating photosynthesis and increasing biomass carbon sequestration. This process is relied upon as a critical buffer against climate change in Earth System Models. However, empirical evidence suggests that in phosphorus-limited landscapes—which cover vast areas of the tropics and subtropics—this fertilization effect often fails to materialize.
+
+This creates a **"Stoichiometric Mismatch"**: while $eCO_2$ increases the supply of Carbon (C), trees require Phosphorus (P) to convert that carbon into biomass (wood and roots). In ancient, weathered soils, P availability is not governed by simple chemical weathering, but by intense biological competition.
+
+### 1.2 The Microbial Pre-emption Hypothesis
+Recent work by **Jiang et al. (2024)** posits the **"Microbial Pre-emption Hypothesis"** as the primary driver of this stagnation. The theory suggests that soil microorganisms—which are biologically faster and spatially closer to nutrient sources—outcompete trees for scarce phosphorus. This effectively "locks" the nutrient away from vegetation, creating a bottleneck that prevents the forest from utilizing the extra carbon available in the atmosphere.
+
+### 1.3 Study Site: The EucFACE Experiment
+To investigate this phenomenon, we utilize data from the **Eucalyptus Free-Air CO$_2$ Enrichment (EucFACE)** experiment. Located in the Cumberland Plain woodlands of New South Wales, Australia, EucFACE is the only fully operational Free-Air CO$_2$ experiment in a mature, native forest in the Southern Hemisphere.
+
+**Site Characteristics:**
+The ecosystem is a mature, evergreen *Eucalyptus tereticornis* woodland situated on ancient alluvial soils. Crucially, the site has a unique disturbance history: it has been unmanaged for over 90 years and has not experienced forest fire for approximately 200 years. This lack of fire-driven nutrient recycling has driven the ecosystem into a state of extreme phosphorus limitation, making it the ideal testbed for nutrient-constraint hypotheses.
+
+**Experimental Design:**
+The experiment consists of six open-air arrays (referred to as **"Rings"**), each 25 meters in diameter and rising into the canopy.
+*   **Treatment ($eCO_2$):** 3 Rings release $CO_2$ programmed to maintain concentrations 150 ppm above ambient levels.
+*   **Control ($aCO_2$):** 3 Rings release ambient air to control for infrastructure effects.
+
+---
+## 2. Data Description & Methodologies
+
+### 2.1 Measurement Methodologies
+The data originates from a comprehensive field campaign at EucFACE (2013–2018). The following specific methods were used to quantify Carbon and Phosphorus stocks and fluxes:
+
+*   **Vegetation Sampling:**
+    *   **Woody Biomass:** Tree growth was measured using dendrometer bands (metal bands around trunks) to track stem increment. Tissue samples (sapwood/heartwood) were collected via drilling.
+    *   **Canopy Turnover:** Leaf litterfall was collected monthly using eight circular fine-mesh traps ($0.2 m^2$) per ring.
+    *   **Root Biomass:** Fine roots ($<2mm$) were sampled using soil coring (augers) and in-growth cores (mesh bags buried in soil) to measure production rates over time.
+
+*   **Chemical Analysis (The "Gold Standard"):**
+    *   **Leaf Tissue:** Dried and ground samples underwent **Kjeldahl digestion** (sulfuric acid + hydrogen peroxide) followed by **colorimetric analysis** (molybdate reaction) to determine P concentration.
+    *   **Woody Tissue:** Samples were analyzed using **Inductively Coupled Plasma Optical Emission Spectroscopy (ICP-OES)**.
+    *   **Root Tissue:** Total P concentration in fine roots was assessed using **X-ray Fluorescence Spectrometry**.
+
+*   **Soil & Microbial Analysis:**
+    *   **Total Soil P:** Determined via **Aqua Regia digestion** followed by ICP-MS analysis.
+    *   **Microbial P:** Measured using **Chloroform Fumigation-Extraction**. Soil samples are fumigated to lyse (burst) microbial cells, releasing their internal P, which is then measured against non-fumigated controls.
+    *   **Net Mineralization (Flux):** Measured *in situ* using PVC soil cores incubated in the ground. The change in phosphate concentration over time represents the net supply rate from soil to plants.
+
+### 2.2 Data Structure and Processing
+*   **File Organization:** Raw data is stored in `.csv` files.
+*   **Spatial Aggregation:** Soil and microbial data, collected at distinct depths (0-10 cm, 10-30 cm), were summed to represent the total active root zone (0-30 cm) for ecosystem-level comparisons.
+
+**Rationale:**
+We included **Ring** as a random intercept to account for the split-plot experimental design. Trees within the same ring are not independent; they share the same soil, microclimate, and history. Furthermore, one ring might naturally have better soil quality than another, regardless of CO2 treatment. Using a random intercept controls for this spatial heterogeneity and prevents pseudoreplication, ensuring that we test the *relative* effect of $eCO_2$ within the system.
 
 ---
 
-## Research Objectives
+## 3. Research Hypotheses
 
-This project is divided into two distinct analytical phases:
+Based on the Microbial Pre-emption theory, we tested four specific predictions:
 
-### 1. Replication Phase (The "Lockout")
-We verify the central claims of *Jiang et al.* using the EucFACE dataset:
-   **Hypothesis 1:** The microbial phosphorus pool is significantly larger than the available soil phosphorus pool.
-   **Hypothesis 2:** Tree biomass (wood carbon) shows no significant increase under $eCO_2$ over time (Biomass Stagnation).
-
-### 2. Alternative Phase (The Adaptation)
-We extend the analysis to test if trees exhibit **Functional Plasticity** (physiological adaptation) despite the biomass stagnation.
-   **Hypothesis 3:** Trees under $eCO_2$ increase their **Phosphorus Use Efficiency (PUE)** (assimilating more Carbon per unit of Phosphorus lost).
-   **Hypothesis 4:** Trees shift carbon allocation from wood to **fine roots** to forage more aggressively for nutrients.
+*   **H1: The Stagnation Hypothesis (Carbon):** Due to nutrient limitation, trees under $eCO_2$ will **not** show a significant increase in woody biomass or root biomass production compared to ambient trees.
+*   **H2: The Nutrient Bottleneck Hypothesis (Fluxes):** Plant Phosphorus uptake will be constrained by microbial competition. We predict that uptake will not increase under $eCO_2$, and that total uptake will exceed measurable soil supply, indicating tight recycling and microbial immobilization.
+*   **H3: The Hoarding Hypothesis (Pools):** Soil microbes will sequester a substantial portion of the ecosystem's phosphorus. We predict the **Microbial P Pool** will be significantly larger than the available soil P pool and comparable to the total vegetation P pool.
+*   **H4: The Functional Plasticity Hypothesis (Efficiency):** Trees will attempt to adapt to the limitation. We predict trees under $eCO_2$ will exhibit higher **Phosphorus Use Efficiency (PUE)**, assimilating more Carbon per unit of Phosphorus used.
 
 ---
 
-## Repository Structure
+## 4. Analytical Framework
 
-The project is organized into a modular pipeline for reproducibility.
+This study employs a four-stage mass-balance analysis to trace the fate of Carbon and Phosphorus through the ecosystem:
+
+1.  **Biomass Assessment:** Testing for physical growth responses (Wood/Root growth).
+2.  **Flux Budgeting:** Comparing **Soil P Supply** (Net Mineralization) against **Tree P Uptake** to quantify the magnitude of the nutrient deficit.
+3.  **Pool Inventory:** Mapping where Phosphorus is stored to test for microbial hoarding.
+4.  **Efficiency Analysis:** Evaluating **Phosphorus Use Efficiency (PUE)** to measure physiological adaptation.
+
+---
+
+## 5. Repository Structure
 
 ```text
 EucFACE_Project/
 ├── data/                       # Raw input files (CSVs)
-│   ├── soil_phosphate_pool.csv
-│   ├── microbial_p_pool.csv
-│   ├── wood_c_pool.csv
-│   ├── overstorey_gpp_flux.csv
-│   └── (Litter flux files...)
-│
+│   ├── Flux_data/            # Daily rate files (Roots, Soil Mineralization, Wood growth)
+│   └── Pool_data/            # Snapshot files (Microbial P, Tissue P concentrations)
 ├── scripts/                    # Analysis Source Code
-│   ├── 01_data_cleaning.R      # Merges raw files into master dataset; handles dates
+│   ├── 01_data_cleaning.R      # Merges raw files into master dataset
 │   ├── 02_replication.R        # Generates P Inventory & Biomass Stagnation plots
 │   └── 03_alternative.R        # Generates PUE & Root Allocation plots + LMM stats
-│
 ├── output/                     # Generated Figures
-│   ├── Fig_Replication.png     # Visual proof of microbial dominance
-│   └── Fig_Alternative.png     # Visual proof of physiological plasticity
-│
-├── Report.qmd                  # Quarto file to generate the final HTML report
-└── master_data.csv             # The cleaned, integrated dataset (generated by Script 01)
+│   └── FINAL_REPORT_ANALYSIS.png  # The 4-panel summary figure
+└── Report.qmd                  # Quarto file to generate the final HTML report

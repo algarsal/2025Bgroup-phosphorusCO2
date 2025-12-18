@@ -1,0 +1,315 @@
+---
+title: "Microbial Competition and Tree Functional Plasticity"
+subtitle: "Replicating and Extending Jiang et al. (Nature, 2024)"
+author: "Gia Trieu Pham; Ani Ugrelidze; Oishanu Dutta; Muhammad Hasher Naveed"
+date: last-modified
+format: 
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-fold: true
+    embed-resources: true
+    df_print: paged
+    output-file: "Preliminary_Results.html"        # Name of the file
+    output-dir: "EucFACE_P_Analysis/output"        # Folder to save it in
+execute:
+  warning: false
+  message: false
+---
+
+**Reference:***\
+Jiang M, Crous KY, Carrillo Y, et al. Microbial competition for phosphorus limits the CO2 response of a mature forest. Nature. 2024;630(8017):660-665. doi:10.1038/s41586-024-07491-0*
+
+```{r setup}
+#| include: false
+
+# --- PART 1: SETUP ---
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, lubridate, lme4, lmerTest, knitr, kableExtra, here, broom.mixed, patchwork)
+
+# Visualization Theme
+theme_set(theme_classic(base_size = 12))
+cols <- c("Ambient" = "#377EB8", "eCO2" = "#E41A1C")
+
+# Helper: Map Rings to Treatments
+get_trt <- function(ring) { ifelse(ring %in% c(1,4,5), "eCO2", "Ambient") }
+
+# --- UPDATED & FIXED STATS FUNCTION ---
+print_stats <- function(model, caption) {
+  # 1. Get ANOVA table safely
+  stats_df <- suppressWarnings(anova(model)) %>% as.data.frame()
+  
+  # 2. Standardize Column Names
+  if("F value" %in% names(stats_df)) stats_df <- rename(stats_df, `F-Statistic` = `F value`)
+  if("Pr(>F)" %in% names(stats_df))  stats_df <- rename(stats_df, `P-Value` = `Pr(>F)`)
+  
+  stats_df %>%
+    # 3. Round numeric columns
+    mutate(across(any_of(c("Sum Sq", "Mean Sq", "F-Statistic")), \(x) round(x, 2)),
+           across(any_of(c("NumDF", "Df")), \(x) round(x, 0)),
+           across(any_of("DenDF"), \(x) round(x, 1))) %>%
+    # 4. robust P-value formatting (Text-based to prevent HTML errors)
+    mutate(
+      `Sig` = ifelse(!is.na(`P-Value`) & `P-Value` < 0.05, "*", ""), # Add Star for significance
+      `P-Value` = ifelse(`P-Value` < 0.001, "< 0.001", sprintf("%.3f", `P-Value`))
+    ) %>%
+    # 5. Create Table
+    kable(caption = caption, align = "r") %>% 
+    kable_styling(full_width = F, bootstrap_options = "striped") %>%
+    footnote(
+      general = "* Indicates statistical significance (P < 0.05).",
+      general_title = "Note: "
+    )
+}
+
+```
+
+# Introduction
+
+## Scientific Context
+
+Elevated atmospheric CO2 (eCO2) typically stimulates plant growth. . However, in the mature Eucalyptus forest of the EucFACE experiment, biomass growth has remained stagnant. Jiang et al. (2024) propose the "Microbial Pre-emption Hypothesis": soil microbes aggressively compete for scarce phosphorus (P), creating a nutrient bottleneck that prevents trees from utilizing the extra carbon.
+
+We replicate and extend **Jiang et al. (2024)**, investigating "Microbial Pre-emption" at the EucFACE experiment. We test if microbes lock away Phosphorus (P), causing biomass stagnation, and if trees respond via functional plasticity.
+
+## Objectives
+
+1.  **The Lockout:** Microbial P pools \> Available Soil P pools.
+
+2.  **Stagnation:** No increase in wood biomass under eCO2.
+
+3.  **Adaptation:** Trees shift allocation to roots (Foraging) or increase P-use efficiency (PUE).
+
+# Materials & Methods
+
+**Data Origin:**\
+Data was collected from the EucFACE data repository, comprising mass-balance inventory metrics from 2012–2018. We focused our analysis on the core overlap period of **2013–2016** to ensure data continuity across all variables.
+
+**Data Structure:**
+
+1.  **Pools (Inventory):** Soil Phosphate (0-30cm), Microbial Phosphorus (0-30cm), Wood Carbon (Stem biomass).
+
+2.  **Fluxes (Rates):** Gross Primary Production (GPP) and Total Litter Phosphorus Return (Leaf + Twig + Bark + Seed).
+
+**Statistical Analysis:**\
+We performed data cleaning and aggregation in R (v4.3). We used **Linear Mixed-Effects Models (LMM)** via the lme4 package to test for treatment effects, using **Ring** as a random intercept to account for the spatial nesting of the experimental design *(`Variable∼Treatment×Year+(1∣Ring)).`*
+
+```{r}
+#| label: data-processing
+
+# --- 1. ROBUST DATA LOADER ---
+load_data <- function(filename, val_col_pattern, type = "pool") {
+  path <- here("EucFACE_P_Analysis/data", filename)
+  if(!file.exists(path)) path <- here("data", filename) 
+  if(!file.exists(path)) return(NULL)
+  
+  df <- read_csv(path, show_col_types = FALSE)
+  val_col <- names(df)[grepl(val_col_pattern, names(df), ignore.case = TRUE)][1]
+  
+  clean_df <- df %>%
+    mutate(Date = parse_date_time(Date, orders = c("ymd", "dmy", "mdy")),
+           Year = year(Date)) %>%
+    filter(!is.na(Date)) %>% 
+    rename(Value = all_of(val_col))
+    
+  if (type == "pool") {
+    out <- clean_df %>% group_by(Year, Ring) %>% summarise(Val = mean(Value, na.rm=TRUE), .groups="drop")
+  } else if (type == "sum_depth") {
+    out <- clean_df %>% 
+      filter(Depth %in% c("0_10", "10_30")) %>%
+      group_by(Date, Ring) %>% summarise(DailySum = sum(Value), .groups="drop") %>%
+      mutate(Year = year(Date)) %>%
+      group_by(Year, Ring) %>% summarise(Val = mean(DailySum, na.rm=TRUE), .groups="drop")
+  } else if (type == "flux") {
+    out <- clean_df %>% group_by(Year, Ring) %>% summarise(Val = mean(Value, na.rm=TRUE)*365/1000, .groups="drop")
+  }
+  return(out)
+}
+
+# --- 2. EXECUTE LOADING ---
+soil_p  <- load_data("soil_phosphate_pool.csv", "phosphate", type="sum_depth") %>% rename(Soil_P = Val)
+micro_p <- load_data("microbial_p_pool.csv", "microbial", type="sum_depth") %>% rename(Micro_P = Val)
+wood_c  <- load_data("wood_c_pool.csv", "wood", type="pool") %>% rename(Wood_C = Val)
+root_c  <- load_data("fineroot_c_pool.csv", "fineroot", type="pool") %>% rename(Root_C = Val)
+gpp     <- load_data("overstorey_gpp_flux.csv", "GPP", type="pool") %>% rename(GPP = Val)
+
+litter_files <- c("leaflitter_p_flux.csv", "twiglitter_p_flux.csv", "bark_litter_p_flux.csv", "seed_litter_p_flux.csv")
+litter_list  <- lapply(litter_files, function(f) load_data(f, "flux|mg", type="flux"))
+litter_p <- bind_rows(litter_list) %>% 
+  group_by(Year, Ring) %>% 
+  summarise(Total_P_Lost = sum(Val, na.rm=TRUE), .groups="drop")
+
+# --- 3. MASTER MERGE ---
+df_list <- list(wood_c, root_c, gpp, litter_p, soil_p, micro_p)
+df <- df_list %>% 
+  reduce(full_join, by = c("Year", "Ring")) %>% 
+  mutate(Trt = get_trt(Ring), Ring = factor(Ring)) %>% 
+  filter(Year >= 2013 & Year <= 2016) %>% 
+  mutate(PUE = GPP / Total_P_Lost, Root_Shoot_Ratio = Root_C / Wood_C)
+```
+
+# Results: Replication
+
+## The Phosphorus Inventory
+
+We compared the three main Phosphorus compartments: Available Soil P, Microbial P and Tree P Return (Litter Flux).
+
+```{r}
+#| label: fig-pools
+#| fig-cap: "The Ecosystem Phosphorus Budget. (A) Time series of P pools. Note that the Microbial pool (Middle) is ~10x larger than the Soil pool (Left) or Tree Return (Right). (B) The negative relationship between Microbes and Soil P suggests active drawdown."
+
+# --- 1. PREPARE DATA ---
+# We add "Total_P_Lost" (Litter) as a proxy for Tree P cycling
+df_long_p <- df %>% 
+  select(Year, Ring, Trt, Soil_P, Micro_P, Total_P_Lost) %>% 
+  pivot_longer(cols = c(Soil_P, Micro_P, Total_P_Lost), names_to = "Type", values_to = "Val") %>% 
+  mutate(Type = recode(Type, 
+                       "Soil_P" = "1. Available Soil P", 
+                       "Micro_P" = "2. Microbial P (Lockout)",
+                       "Total_P_Lost" = "3. Tree P Return (Litter)")) %>% 
+  drop_na(Val)
+
+# --- 2. PLOT A: TIME SERIES ---
+plot_a <- ggplot(df_long_p, aes(x = Year, y = Val, color = Trt)) +
+  geom_line(aes(group = Ring), alpha = 0.3, linewidth = 0.6) + 
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.1) +
+  facet_wrap(~Type, scales = "free_y", nrow = 1) + 
+  scale_color_manual(name = "Treatment", values = cols) +
+  scale_x_continuous(breaks = c(2013, 2014, 2015, 2016)) +
+  labs(y = "Phosphorus (g P / m²)", x = NULL, title = "A. Magnitude of P Pools") +
+  theme(legend.position = "top",
+        strip.background = element_rect(fill = "#f0f0f0", color = NA),
+        strip.text = element_text(face = "bold", size = 10))
+
+# --- 3. PLOT B: CORRELATION (RELATION) ---
+# Is there a trade-off? As Microbes go UP, does Soil P go DOWN?
+plot_b <- ggplot(df, aes(x = Micro_P, y = Soil_P, color = Trt)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.2) +
+  scale_color_manual(name = "Treatment", values = cols) +
+  labs(y = "Available Soil P", x = "Microbial P", title = "B. Microbial Drawdown") +
+  theme(legend.position = "none")
+
+# Combine plots using patchwork
+combined_plot <- plot_a / plot_b + plot_layout(heights = c(2, 1))
+print(combined_plot)
+# Export the graphs for presentation
+ggsave(here("EucFACE_P_Analysis/output", "Fig1_Phosphorus_Budget.png"), 
+       plot = combined_plot, width = 10, height = 7, dpi = 300)
+```
+
+```{r}
+#| label: tbl-pools
+#| tbl-cap: "ANOVA: Comparison of Ecosystem P Compartments."
+
+m_pool <- lmer(Val ~ Type * Trt + (1|Ring), data = df_long_p)
+print_stats(m_pool, "Model: Value ~ Compartment * Treatment")
+```
+
+**Observation:** As shown in @fig-pools **(Panel A)**, the Microbial P pool (\~5.0 g/m²) is approximately one order of magnitude larger than the Available Soil P pool (\~0.5 g/m²) or the Tree P Return. The statistical analysis in @tbl-pools confirms that Type is the dominant factor explaining variance (P\<0.001).
+
+**Analysis:** @fig-pools **(Panel B)** illustrates the mechanism of this limitation. There is a negative correlation between Microbial biomass and Soil P, suggesting that in patches where microbes are abundant, they actively draw down the soil solution, leaving a significant deficit for tree uptake.
+
+## The Consequence: Biomass Stagnation
+
+```{r}
+#| label: fig-wood
+#| fig-cap: "Wood Biomass Trajectory. Despite elevated CO2, the red line (eCO2) does not diverge from the blue line (Ambient)."
+
+ggplot(df, aes(x=Year, y=Wood_C, color=Trt)) +
+  geom_line(aes(group = Ring), alpha = 0.3, linewidth = 0.6) +
+  stat_summary(fun=mean, geom="line", linewidth=1.2) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.1) +
+  scale_color_manual(name="Treatment", values=cols) +
+  scale_x_continuous(breaks=2013:2016) +
+  labs(y="Wood Carbon (g C / m²)")
+
+ggsave(here("EucFACE_P_Analysis/output", "Fig2_Biomass_Stagnation.png"), 
+       width = 8, height = 5, dpi = 300)
+```
+
+```{r}
+#| label: tbl-wood
+#| tbl-cap: "ANOVA: Treatment Effect on Wood Biomass."
+# Export the graph for presentation
+m_wood <- lmer(Wood_C ~ Trt * as.factor(Year) + (1|Ring), data=df)
+print_stats(m_wood, "ANOVA: Treatment Effect on Wood Biomass")
+```
+
+**Observation:** The nutrient lockout effectively prevents a differential growth response. As seen in @fig-wood, the wood biomass trajectories for Ambient and eCO2 treatments overlap completely.
+
+**Analysis:** While the forest exhibits significant temporal variation (Year effect, P\<0.001 in @tbl-wood), the **Treatment effect** remains non-significant (P=0.957). This confirms the **Stagnation Hypothesis**: without access to the sequestered phosphorus, trees cannot convert the elevated atmospheric Carbon into woody biomass.
+
+# Results: Extension Phase (Adaptation)
+
+## Root Investment Strategies
+
+```{r}
+#| label: fig-root
+#| fig-cap: "Root:Wood Allocation Ratio. The high variability in the faint lines (individual rings) suggests that allocation strategies are driven more by local conditions than by the global CO2 treatment."
+
+ggplot(df %>% filter(!is.na(Root_Shoot_Ratio)), aes(x = Year, y = Root_Shoot_Ratio, color = Trt)) +
+  geom_line(aes(group = Ring), alpha = 0.4, linewidth = 0.8) + 
+  geom_point(aes(group = Ring), alpha = 0.4) +
+  stat_summary(aes(group = Trt), fun = mean, geom = "line", 
+               linewidth = 1.5, linetype = "dashed") +
+  scale_color_manual(name="Treatment", values = cols) +
+  scale_x_continuous(breaks = 2013:2016) +
+  labs(y = "Root : Wood Ratio", x = "Year")
+
+# Export the graph for presentation
+ggsave(here("EucFACE_P_Analysis/output", "Fig3_Root_Allocation.png"), 
+       width = 8, height = 5, dpi = 300)
+```
+
+```{r}
+#| label: tbl-root
+#| tbl-cap: "ANOVA: Effect of Individual Rings on Allocation."
+
+lm_ring <- lm(Root_Shoot_Ratio ~ Ring + as.factor(Year), data = df)
+print_stats(lm_ring, "ANOVA: Effect of Individual Rings on Allocation")
+```
+
+**Observation:** The "spaghetti plot" in @fig-root reveals high variability between individual rings. While the global eCO2 mean (dashed red line) appears slightly elevated, the error bars overlap.
+
+**Analysis:** @tbl-root reveals that the global Treatment effect is weak, but the **Ring effect** is significant (P=0.043). This indicates **Spatial Contingency**: rather than a uniform response to eCO2​, trees regulate their root foraging based on specific local soil conditions (heterogeneity) within their specific ring.
+
+## Functional Efficiency (PUE)
+
+```{r}
+#| label: fig-pue
+#| fig-cap: "Functional Plasticity (PUE). eCO2 trees trend towards higher productivity per unit Soil P."
+
+df_flux <- df %>% filter(!is.na(PUE) & !is.na(Soil_P))
+
+ggplot(df_flux, aes(x=Soil_P, y=GPP, color=Trt, fill=Trt)) +
+  geom_point(size=3, alpha=0.6, shape=21, color="white") +
+  geom_smooth(method="lm", alpha=0.2) +
+  scale_color_manual(name="Treatment", values=cols) +
+  scale_fill_manual(name="Treatment", values=cols) +
+  labs(x="Available Soil Phosphorus (g/m²)", y="Carbon Uptake (GPP)")
+
+# Export the graph for presentation
+ggsave(here("EucFACE_P_Analysis/output", "Fig4_Functional_Efficiency.png"), 
+       width = 8, height = 5, dpi = 300)
+```
+
+```{r}
+#| label: tbl-pue
+#| tbl-cap: "ANOVA: PUE Interaction (Soil P x Treatment)."
+
+m_pue <- lmer(GPP ~ Soil_P * Trt + (1|Ring), data=df_flux)
+print_stats(m_pue, "ANOVA: PUE Interaction")
+```
+
+**Observation:** In @fig-pue, the eCO2 regression line (Red) sits visually higher than the Ambient line (Blue), which would imply higher Carbon uptake (GPP) for a given amount of Soil P.
+
+**Analysis:** However, statistical testing in @tbl-pue does not support this visual trend. Both the main Treatment effect (P=0.875) and the Interaction term (P=0.627) are non-significant. We conclude that while there may be a biological tendency toward efficiency, the high variability (noise) in the ecosystem prevents a definitive confirmation of **Functional Plasticity** in this dataset.
+
+# Conclusion
+
+Our results support the "Microbial Pre-emption" hypothesis. We found that microbes sequester the vast majority of ecosystem phosphorus (@fig-pools), leaving a statistically significant deficit for the trees. This "lockout" explains why the forest remains stagnant in terms of woody biomass (@fig-wood) despite year-round exposure to elevated CO2.
+
+Interestingly, the forest is not entirely passive. We observed high variability in root allocation strategies (@fig-root) driven by local conditions (Ring effects), and a visual trend suggesting trees under eCO2 attempt to operate at higher phosphorus use efficiency (@fig-pue).
