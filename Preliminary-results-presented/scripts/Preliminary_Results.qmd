@@ -1,8 +1,16 @@
 ---
 title: "Microbial Competition and Tree Functional Plasticity"
 subtitle: "Replicating and Extending Jiang et al. (Nature, 2024)"
-author: "Gia Trieu Pham; Ani Ugrelidze; Oishanu Dutta; Muhammad Hasher Naveed"
+author: 
+- afiliation: Universitat Politècnica de València.
+- name: "Gia Trieu Pham; Ani Ugrelidze; Oishanu Dutta; Muhammad Hasher Naveed"
+
+lang: en-EN
+language: 
+  title-block-published: "Last changed"
 date: last-modified
+date-format: iso
+
 format: 
   html:
     theme: cosmo
@@ -11,8 +19,9 @@ format:
     code-fold: true
     embed-resources: true
     df_print: paged
-    output-file: "Preliminary_Results-2025BGroup-phosphorusCO2.html" # Name of the file
-    output-dir: "EucFACE_P_Analysis/output"                    # Folder to save it in
+    output-file: "Preliminary_Results.html"            # Name of the file
+    output-dir: "EucFACE_P_Analysis/output"            # Folder to save it in
+    
 execute:
   warning: false
   message: false
@@ -21,10 +30,15 @@ execute:
 ```{r setup}
 #| include: false
 
-# --- PART 1: SETUP ---
+# --- PART 1A: SETUP THE LIBRARY ---
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse, lubridate, lme4, lmerTest, knitr, kableExtra, here, broom.mixed, patchwork)
 
+```
+
+```{r}
+
+# --- PART 1B: 
 # Visualization Theme
 theme_set(theme_classic(base_size = 12))
 cols <- c("Ambient" = "#377EB8", "eCO2" = "#E41A1C")
