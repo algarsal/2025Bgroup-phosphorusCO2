@@ -1,5 +1,5 @@
 #Load the correct location of files we are using for this code:
-setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_data")
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Flux_Data")
 library(tidyverse)
 library(lubridate)
 
@@ -44,7 +44,7 @@ df_leaf_dem  <- process_flux_correct("canopy_p_flux.csv", "canopy_p_flux", "Cano
 # For roots, use production flux
 df_root_dem  <- process_flux_correct("fineroot_p_production_flux.csv", "fineroot_p_flux_mg_m2_d", "Root_Demand")
 
-# --- RECYCLING (P retranslocated internally) How much Phosphorus the tree sucks back in from dying leaves/wood before dropping them.
+# --- RECYCLING (P retranslocated internally) How much Phosphorus the tree takes back in from dying leaves/wood before dropping them.
 df_leaf_ret  <- process_flux_correct("canopy_P_retranslocation_flux.csv", "canopy_p_retrans_flux", "Canopy_Retrans")
 df_wood_ret  <- process_flux_correct("sapwood_P_retranslocation_flux.csv", "sapwood_p_retrans_flux", "Wood_Retrans")
 df_root_ret  <- process_flux_correct("fineroot_P_retranslocation_flux.csv", "fineroot_p_retrans_flux", "Root_Retrans")
@@ -98,7 +98,7 @@ final_analysis <- budget_calc %>%
     P_Gap = Soil_P_Supply - Plant_P_Uptake
   )
 
-# 5. VISUALIZATION & STATISTICS --------------------------------------------
+# 5. VISUALIZATION & STATISTICS
 
 # A. Visualizing the Fluxes
 plot_data <- final_analysis %>%
@@ -127,13 +127,12 @@ summary_table <- final_analysis %>%
 
 print("--- Time-Averaged Ecosystem P Budget (2013-2018) ---")
 print(summary_table)
-
-#Orange Box (Soil Supply) is significantly higher than the Green Box (Tree Uptake).The soil microbes are mineralizing (releasing) plenty of Phosphorus—enough to support more tree growth. However, the trees are only capturing a small fraction of it.This proves the "Microbial Bottleneck." The microbes release the P, but because they are physically closer to the enzyme sites and biologically faster, they "immobilize" (eat) the P before the tree roots can grab it.
-# CO2 did not solve the problem.Green Boxes (Uptake) for aCO2 vs eCO2 are likely at the same level (no significant increase).#Scientific Meaning: Even though the trees had extra Carbon (energy) from the eCO2 to grow more roots , it didn't result in more Phosphorus Uptake.
-#Result: The microbial competition is so strong that it negates the benefits of elevated CO2. The trees cannot "buy" their way out of the nutrient shortage.
+setwd("C:/Users/augre/Desktop/UPV S1/Data/2025Bgroup-phosphorusCO2/Project outcome")
 
 
-
+#Interpretation:
+"The Phosphorus Flux Budget (Figure X) reveals a profound imbalance between measured Soil P Supply (Net Mineralization) and calculated Plant P Uptake. Discrepancy in Flux Magnitudes: Plant P Uptake (~0.21 g P m⁻² yr⁻¹) exceeded measured Soil P Supply (~0.01 g P m⁻² yr⁻¹) by an order of magnitude. This indicates that Net Mineralization is near zero, suggesting that soil microbes are immobilizing Phosphorus immediately upon release, leaving negligible 'free' phosphate in the soil solution. Implications for Uptake Mechanisms: The fact that trees are acquiring P despite the lack of free soil supply suggests they are relying on direct organic P acquisition via mycorrhizal symbiosis, bypassing the available soil pool.
+Lack of CO2 Response: Crucially, there was no significant difference in Plant P Uptake between ambient and elevated CO2 treatments. This confirms that the trees were unable to overcome the microbial bottleneck to sequester additional nutrients, explaining the observed biomass stagnation."
 
 
 # C. Is the gap significantly larger under eCO2? (Testing the hypothesis)
