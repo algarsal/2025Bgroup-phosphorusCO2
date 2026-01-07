@@ -1,0 +1,219 @@
+---
+title: "Microbial Competition and Tree Functional Plasticity"
+subtitle: "Extended Analysis: Monthly Dynamics & Seasonality (2013-2021)"
+author: 
+  - name: "Gia Trieu Pham; Ani Ugrelidze; Oishanu Dutta; Muhammad Hasher Naveed"
+    affiliation: Universitat Politècnica de València
+date: last-modified
+date-format: iso
+format: 
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-fold: true
+    embed-resources: true
+    df_print: paged
+execute:
+  warning: false
+  message: false
+---
+
+# Introduction & Setup
+
+This analysis replicates and extends Jiang et al. (2024) by shifting the temporal resolution from **annual averages** to **monthly time-steps**. This approach allows us to: 1. Capture rapid microbial pulses masked in annual means. 2. Investigate seasonal "lockout" dynamics. 3. Test for functional plasticity (PUE) with higher statistical power.
+
+We employ **Linear Interpolation** to align asynchronous datasets (e.g., annual biomass measurements vs. monthly litterfall) for continuous multivariate analysis.
+
+```{r}
+#| label: setup-libraries
+#| include: false
+
+# 0. CLEAN ENVIRONMENT (Fixes 'environment' errors)
+rm(list=ls()) 
+
+# 1. LOAD LIBRARIES
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, lubridate, lme4, lmerTest, knitr, kableExtra, here, zoo, patchwork)
+
+# 2. VISUALIZATION THEME
+theme_set(theme_classic(base_size = 12))
+cols <- c("Ambient" = "#377EB8", "eCO2" = "#E41A1C")
+
+# 3. HELPER FUNCTION FOR ANOVA TABLES
+run_anova <- function(model) {
+  anova(model) %>% 
+    as.data.frame() %>%
+    mutate(across(where(is.numeric), \(x) round(x, 3))) %>%
+    mutate(Sig = ifelse(`Pr(>F)` < 0.05, "*", "")) %>%
+    kable() %>% kable_styling(full_width = F)
+}
+```
+
+# Data Processing: Monthly Aggregation & Interpolation
+
+We aggregated data to a monthly time-step to capture seasonal dynamics. Linear interpolation (`zoo::na.approx`) was used to fill sampling gaps, ensuring continuous time-series for multivariate analysis.
+
+```{r}
+#| label: load-clean-data
+
+# --- STEP 1: SIMPLIFIED DATA LOADING FUNCTION ---
+get_monthly_data <- function(file, pattern, is_flux = FALSE) {
+  # Locate file (checks multiple directories)
+  path <- here("EucFACE_P_Analysis/data", file)
+  if(!file.exists(path)) path <- here("data", file)
+  
+  df <- read_csv(path, show_col_types = FALSE)
+  
+  # Identify value column based on pattern
+  val_col <- names(df)[grepl(pattern, names(df), ignore.case = TRUE)][1]
+  
+  df %>%
+    mutate(Date = parse_date_time(Date, orders = c("ymd", "dmy", "mdy"))) %>%
+    filter(!is.na(Date)) %>%
+    # CRITICAL: Floor date to the 1st of the month for synchronization
+    mutate(MonthDate = floor_date(Date, "month")) %>% 
+    rename(RawValue = all_of(val_col)) %>%
+    # Group by Month and Ring
+    group_by(MonthDate, Ring) %>%
+    summarise(Val = if(is_flux) sum(RawValue, na.rm=T) else mean(RawValue, na.rm=T), .groups="drop")
+}
+
+# --- STEP 2: LOAD INDIVIDUAL VARIABLES ---
+# Pools (Inventory) -> Use Mean
+wood  <- get_monthly_data("wood_c_pool.csv", "wood") %>% rename(Wood_C = Val)
+soil  <- get_monthly_data("soil_phosphate_pool.csv", "phosphate") %>% rename(Soil_P = Val)
+micro <- get_monthly_data("microbial_p_pool.csv", "microbial") %>% rename(Micro_P = Val)
+root  <- get_monthly_data("fineroot_c_pool.csv", "fineroot") %>% rename(Root_C = Val)
+gpp   <- get_monthly_data("overstorey_gpp_flux.csv", "GPP") %>% rename(GPP = Val)
+
+# Fluxes (Litterfall) -> Use Sum
+litter_files <- c("leaflitter_p_flux.csv", 
+  "twig_litter_p_flux.csv", 
+  "bark_litter_p_flux.csv", 
+  "seed_litter_p_flux.csv") 
+litter <- lapply(litter_files, function(f) get_monthly_data(f, "flux", is_flux = TRUE)) %>%
+  bind_rows() %>%
+  group_by(MonthDate, Ring) %>%
+  summarise(Litter_P = sum(Val, na.rm=T), .groups="drop")
+
+# --- STEP 3: MERGE & INTERPOLATE (CRITICAL) ---
+df_final <- list(wood, soil, micro, root, gpp, litter) %>%
+  reduce(full_join, by = c("MonthDate", "Ring")) %>%
+  mutate(Ring = factor(Ring)) %>%
+  
+  # Arrange for correct time-series interpolation
+  arrange(Ring, MonthDate) %>%
+  
+  # Create a complete time grid for every Ring (Fixes missing months)
+  group_by(Ring) %>%
+  complete(MonthDate = seq(min(MonthDate), max(MonthDate), by = "month")) %>%
+  
+  # Linear Interpolation (Fill NA values based on neighbors)
+  mutate(across(c(Wood_C, Soil_P, Micro_P, Root_C, GPP, Litter_P), 
+                ~na.approx(.x, na.rm = FALSE, rule = 2))) %>%
+  ungroup() %>%
+  
+  # Add Metadata & Derived Variables
+  mutate(
+    Year = year(MonthDate),
+    # Define Australian Seasons (Southern Hemisphere)
+    Season = case_when(
+      month(MonthDate) %in% c(12, 1, 2) ~ "Summer",
+      month(MonthDate) %in% c(3, 4, 5) ~ "Autumn",
+      month(MonthDate) %in% c(6, 7, 8) ~ "Winter",
+      TRUE ~ "Spring"
+    ),
+    Trt = ifelse(Ring %in% c(1,4,5), "eCO2", "Ambient"),
+    PUE = GPP / Litter_P # Phosphorus Use Efficiency
+  ) %>%
+  filter(Year >= 2012 & Year <= 2018) # Filter for the consistent data period
+
+# Preview Data
+head(df_final, 10)
+```
+
+# Results: Replication (The Mechanism & Consequence)
+
+## A. The Consequence: Biomass Stagnation
+
+First, we verify the "Stagnation Hypothesis": Does Wood Carbon increase over time under eCO2?
+
+```{r}
+#| label: fig-biomass
+#| fig-cap: "Biomass Trend. The eCO2 trajectory (Red) does not significantly diverge from Ambient (Blue) over time."
+
+ggplot(df_final, aes(x = MonthDate, y = Wood_C, color = Trt)) +
+  # Faint lines for individual rings
+  geom_line(aes(group = Ring), alpha = 0.3) +
+  # Overall trend line (Linear Model)
+  geom_smooth(method = "lm", se = TRUE, size = 1.2) +
+  scale_color_manual(values = cols) +
+  labs(x = "Time (Month)", y = "Wood Carbon (g/m²)", title = "Wood Biomass Trajectory")
+
+#| label: stats-biomass
+# Model: Biomass ~ Treatment * Year
+m_wood <- lmer(Wood_C ~ Trt * Year + (1|Ring), data = df_final)
+run_anova(m_wood)
+```
+
+**Observation:** The overlapping trend lines and the non-significant interaction term in the ANOVA table confirm that eCO2 has not unlocked additional biomass growth.
+
+## B. The Mechanism: Microbial Lockout
+
+Why is biomass stagnating? We test the "Microbial Pre-emption" hypothesis by examining the relationship between Microbial P and Soil P.
+
+```{r}
+#| label: fig-lockout
+#| fig-cap: "Negative Correlation. Increasing microbial P (x-axis) is associated with reduced available soil P (y-axis)."
+
+ggplot(df_final, aes(x = Micro_P, y = Soil_P, color = Trt)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  scale_color_manual(values = cols) +
+  labs(x = "Microbial P (g/m²)", y = "Soil Available P (g/m²)", title = "Microbial Drawdown Mechanism")
+
+#| label: stats-lockout
+# Model: Soil P ~ Microbial P
+m_lockout <- lmer(Soil_P ~ Micro_P * Trt + (1|Ring), data = df_final)
+run_anova(m_lockout)
+```
+
+**Observation:** The significant negative slope supports the hypothesis that microbes are actively sequestering phosphorus, limiting availability for trees.
+
+## C. Seasonality of Competition
+
+When is the competition most intense? We break down microbial dynamics by season to explore when the competition is most intense and if trees show functional plasticity (PUE).
+
+```{r}
+#| label: fig-season-combined
+#| fig-cap: "Left: Microbial P pools peak in Summer. Right: Trees tend to increase PUE in Summer/Autumn to adapt to scarcity."
+
+p1 <- ggplot(df_final, aes(x = Season, y = Micro_P, fill = Trt)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = cols) +
+  labs(title = "1. Seasonal Microbial P", x = NULL, y = "Microbial P (g/m²)") +
+  theme(legend.position = "none")
+
+p2 <- ggplot(df_final %>% filter(PUE < 1000), aes(x = Season, y = PUE, fill = Trt)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = cols) +
+  labs(title = "2. Seasonal PUE (Adaptation)", x = NULL, y = "PUE (C (g) / P (g) )")
+
+p1 + p2 # Combine plots side-by-side
+
+#| label: stats-pue
+# Model: PUE ~ Treatment * Season
+m_pue <- lmer(PUE ~ Trt * Season + (1|Ring), data = df_final)
+run_anova(m_pue)
+```
+
+# Conclusion
+
+By extending the analysis to monthly time-steps with linear interpolation, we observe:
+
+1.  **Stagnation:** Wood biomass remains unresponsive to eCO2.
+
+2.  **Lockout:** There is a clear negative relationship between microbial biomass and soil P availability.
+
+3.  **Seasonality:** Microbial competition peaks in Summer. Trees exhibit signs of adaptation (increased PUE) during this period, but it is insufficient to overcome the nutrient limitation.
