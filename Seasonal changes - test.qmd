@@ -22,10 +22,20 @@ execute:
 
 # 1. Introduction
 
+<<<<<<< HEAD
 ## Scientific Context
 =======
 
-Elevated atmospheric CO2 (eCO2) typically stimulates plant growth. . However, in the mature Eucalyptus forest of the EucFACE experiment, biomass growth has remained stagnant. Jiang et al. (2024) propose the "Microbial Pre-emption Hypothesis": soil microbes aggressively compete for scarce phosphorus (P), creating a nutrient bottleneck that prevents trees from utilizing the extra carbon.
+## 1.1 Scientific Context: The Paradox of Enrichment
+<<<<<<< HEAD
+>>>>>>> 4826ff6d91e989d1d22185efb273454dd780e59f
+=======
+
+Elevated atmospheric CO2 (eCO2) is widely predicted to act as a "fertilizer" for global forests, stimulating photosynthesis and increasing biomass carbon sequestration. This process is relied upon as a critical buffer against climate change in Earth System models. However, empirical evidence suggests that in phosphorus-limited landscapes- which cover vast areas of tropics and subtropics-this fertilization effect often fails to materialize. 
+
+This creates a **"Stoichiometric Mismatch"**: while $eCO_2$ increases the supply of Carbon (C), trees require Phosphorus (P) to convert that carbon into biomass (wood and roots). In ancient, weathered soils, P availability is not governed by simple chemical weathering, but by intense biological competition.  
+
+In the mature Eucalyptus forest of the EucFACE experiment, biomass growth has remained stagnant. Jiang et al. (2024) propose the "Microbial Pre-emption Hypothesis": soil microbes aggressively compete for scarce phosphorus (P), creating a nutrient bottleneck that prevents trees from utilizing the extra carbon.
 
 
 
