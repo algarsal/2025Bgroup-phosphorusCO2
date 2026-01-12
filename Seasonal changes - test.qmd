@@ -23,7 +23,6 @@ execute:
 # 1. Introduction
 
 ## Scientific Context
-<<<<<<< HEAD
 =======
 
 Elevated atmospheric CO2 (eCO2) typically stimulates plant growth. . However, in the mature Eucalyptus forest of the EucFACE experiment, biomass growth has remained stagnant. Jiang et al. (2024) propose the "Microbial Pre-emption Hypothesis": soil microbes aggressively compete for scarce phosphorus (P), creating a nutrient bottleneck that prevents trees from utilizing the extra carbon.
@@ -31,7 +30,6 @@ Elevated atmospheric CO2 (eCO2) typically stimulates plant growth. . However, in
 
 
 This analysis replicates and extends Jiang et al. (2024) by shifting the temporal resolution from **annual averages** to **monthly time-steps**. This approach allows us to: 1. Capture rapid microbial pulses masked in annual means. 2. Investigate seasonal "lockout" dynamics. 3. Test for functional plasticity (PUE) with higher statistical power.
->>>>>>> 95d12f7890b07c618765f7940e2ebca95ef969e2
 
 Elevated atmospheric CO₂ (eCO₂) typically stimulates plant growth. However, in the mature Eucalyptus forest of the EucFACE experiment, biomass growth has remained stagnant. Jiang et al. (2024) propose the **"Microbial Pre-emption Hypothesis"**: soil microbes aggressively compete for scarce phosphorus (P), creating a nutrient bottleneck that prevents trees from utilizing the extra carbon.
 
